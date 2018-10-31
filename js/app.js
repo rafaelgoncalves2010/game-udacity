@@ -14,18 +14,13 @@ var Enemy = function(x,y) {
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-  //ctx.clearRect(0,0, this.x, this.y);
-  // all computers.
-   //ctx.clearRect(0,0, this.x, this.y);
-
-      while(this.x < 400){
-        
-        this.x += 50 * dt; // vc precisa multiplicar a posição pelo DT aqui
-        console.log(this.x);    
-      }
-
-      this.x = 0;
+    // which will ensure the game runs at the same speed for all computers.
+    if(this.x < 400){
+        this.x += 1; // vc precisa multiplicar a posição pelo DT aqui
+        colisao(this.x,this.y,player.x,player.y);
+    }else{
+        this.x = 0;
+    }
 };
 
 // Draw the enemy on the screen, required method for game
@@ -33,9 +28,6 @@ Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-/* Enemy.prototype.handleInput = function(){
-
-} */
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
@@ -55,30 +47,43 @@ Joagador.prototype.render = function(){
 
 Joagador.prototype.handleInput = function(n){
     if(n === 'down'){
-        this.y += 52;
+        this.y += 100;
     }else if(n === 'up'){
-        this.y += -52;
+        this.y += -100;
     }else if(n === 'left'){
-        this.x +=  -52;
+        this.x +=  -100;
     }else{
-        this.x += 52;
+        this.x += 100;
     }
     this.render();
 }
 
-// Now instantiate your objects.
-var en1 = new Enemy(0,52);
-var en2 = new Enemy(0,122);
-var en3 = new Enemy(0,202);
+function colisao(xE,yE,xP,yP){
+    console.log(xE,yE,xP,yP);
+    if(xE === xP && yE === yP){
+        alert("bateu!");
+    }
+}
 
+// Now instantiate your objects.
+var en1 = new Enemy(0,60);
+var en2 = new Enemy(0,140);
+var en3 = new Enemy(0,220);
 
 var play1 = new Joagador();
 // Place all enemy objects in an array called allEnemies
-var allEnemies = [en1,en2,en3];
+var allEnemies = [en1];
+
+setTimeout(function(){
+ allEnemies.push(en2);
+},3000);
+
+setTimeout(function(){
+    allEnemies.push(en3);
+   },1000);
 
 // Place the player object in a variable called player
 var player = play1;
-
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
@@ -91,5 +96,4 @@ document.addEventListener('keyup', function(e) {
     };
 
     player.handleInput(allowedKeys[e.keyCode]);
-    play1.handleInput(allowedKeys[e.keyCode]);
 });
