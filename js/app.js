@@ -31,10 +31,10 @@ Enemy.prototype.render = function() {
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
-var Joagador = function(){
+var Joagador = function(x,y){
     this.caracter = 'images/char-boy.png';
-    this.x=200;
-    this.y=300;
+    this.x=x;
+    this.y=y;
 }
 
 Joagador.prototype.update = function(){
@@ -47,9 +47,9 @@ Joagador.prototype.render = function(){
 
 Joagador.prototype.handleInput = function(n){
     if(n === 'down'){
-        this.y += 100;
+        this.y += 80;
     }else if(n === 'up'){
-        this.y += -100;
+        this.y += -80;
     }else if(n === 'left'){
         this.x +=  -100;
     }else{
@@ -59,28 +59,39 @@ Joagador.prototype.handleInput = function(n){
 }
 
 function colisao(xE,yE,xP,yP){
-    console.log(xE,yE,xP,yP);
-    if(xE === xP && yE === yP){
-        alert("bateu!");
+    console.log("xe "+xE,"ye "+yE,"xp "+xP,"yp "+yP);
+    var maximo = xP+50;
+    var minimo = xP-50;
+    console.log(minimo,maximo);
+    if(yP === 220 || yP === 140 || yP === 60 ){
+
+        if(xE > minimo && xE < maximo ){
+          alert("bateu!");
+          delete player;
+         superInit();
+        }
     }
 }
 
 // Now instantiate your objects.
-var en1 = new Enemy(0,60);
+//var en1 = new Enemy(0,60);
 var en2 = new Enemy(0,140);
-var en3 = new Enemy(0,220);
+//var en3 = new Enemy(0,220);
+var play1 = new Joagador(200,300);
 
-var play1 = new Joagador();
+function superInit(){
+    var play1 = new Joagador(200,300);
+}
 // Place all enemy objects in an array called allEnemies
-var allEnemies = [en1];
+var allEnemies = [];
 
 setTimeout(function(){
  allEnemies.push(en2);
 },3000);
 
-setTimeout(function(){
-    allEnemies.push(en3);
-   },1000);
+//setTimeout(function(){
+  //  allEnemies.push(en3);
+  // },1000);
 
 // Place the player object in a variable called player
 var player = play1;
