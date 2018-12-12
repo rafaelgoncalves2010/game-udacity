@@ -2,7 +2,7 @@
 var Enemy = function(x,y) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
-    this.x = x;
+    this.x = Math.floor(Math.random() * x);
     this.y = y;
 
     // The image/sprite for our enemies, this uses
@@ -28,6 +28,14 @@ Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+//configurar valores
+var config = {
+    "player": {
+        "initial_X": 200,
+         "initial_Y": 300
+    }
+}
+
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
@@ -41,9 +49,9 @@ Jogador.prototype.update = function(){
     ctx.clearRect(0,0, this.x, this.y);
 }
 
-function resetPlayer(){
-    play1.x = 200;
-    play1.y = 300;
+Jogador.prototype.resetPlayer = function(){
+    play1.x = config.player.initial_X;
+    play1.y = config.player.initial_Y;
 }
 
 Jogador.prototype.render = function(){
@@ -59,7 +67,7 @@ Jogador.prototype.handleInput = function(n){
             break;
         case "up":
             if (this.y === -20){
-                resetPlayer();
+                player.resetPlayer();
             }else{
                 this.y += -80;
             }
@@ -75,43 +83,35 @@ Jogador.prototype.handleInput = function(n){
         }
 }
 
-function createEfect(){
-    var div = document.createElement('div');
-    div.style.color = 'black';
-    div.style.height = '100vh';
-    div.style.width = '100%';
-    return div;
-}
-
 Enemy.prototype.colisao = function(xE,yE,xP,yP){
     let tamanhoInimigo = 50;
- var t = document.querySelector('body');
-    if((xE + tamanhoInimigo) >= xP && (xE - tamanhoInimigo) <= xP) {
-        if((yE + tamanhoInimigo) >= yP && (yE - tamanhoInimigo) <= yP) {
-            resetPlayer();
-            var d = createEfect();
-            t.appendChild(d);
+        if((xE + tamanhoInimigo) >= xP && (xE - tamanhoInimigo) <= xP) {
+            if((yE + tamanhoInimigo) >= yP && (yE - tamanhoInimigo) <= yP) {
+                player.resetPlayer();
+            }
         }
-    }
 }
 
 // Now instantiate your objects.
-var en1 = new Enemy(Math.floor(Math.random() * 480),60);
-var en2 = new Enemy(Math.floor(Math.random() * 480),140);
-var en3 = new Enemy(Math.floor(Math.random() * 480),220);
-var play1 = new Jogador(200,300);
-
+var en1 = new Enemy(480,60);
+var en2 = new Enemy(480,140);
+var en3 = new Enemy(480,220);
+var play1 = new Jogador(config.player.initial_X, config.player.initial_Y);
 
 // Place all enemy objects in an array called allEnemies
-var allEnemies = [en1];
+var allEnemies = [];
+var randomNumber;
 
-setTimeout(function(){
-allEnemies.push(en2);
-},3000);
+function addEnemies(arr, ene){
+    randomNumber = Math.floor((Math.random() * 2000) + 1000);
+    setTimeout(function(){
+        arr.push(ene);
+        },randomNumber);
+}
 
-setTimeout(function(){
-allEnemies.push(en3);
-},1000);
+addEnemies(allEnemies, en1);
+addEnemies(allEnemies, en2);
+addEnemies(allEnemies, en3);
 
 // Place the player object in a variable called player
 var player = play1;
