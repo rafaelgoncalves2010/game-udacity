@@ -1,6 +1,6 @@
 # Arcade Game
 
-This is an arcade game 
+This is an arcade game, provide by Udacity as a javascript test.
 
 ## Getting Started
 
